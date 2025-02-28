@@ -1,0 +1,326 @@
+<div class="container my-5">
+  <!-- Summary Cards -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+          <div class="card text-white bg-primary h-100 shadow">
+            <div class="card-body text-center">
+              <h4 class="card-title"><i class="fa fa-folder"></i> Departments</h4>
+              <p class="card-text display-6">{{ departments.length }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card text-white bg-success h-100 shadow">
+            <div class="card-body text-center">
+              <h4 class="card-title"><i class="fa fa-users"></i> Students</h4>
+              <p class="card-text display-6">{{ students.length }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card text-white bg-warning h-100 shadow">
+            <div class="card-body text-center">
+              <h4 class="card-title"><i class="fa fa-book"></i> Courses</h4>
+              <p class="card-text display-6">{{ courses.length }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students Table -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+          <h4 class="card-title mb-0">Students</h4>
+          <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+            <i class="fa fa-plus"></i> Add Student
+          </button>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of students; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ s.first_name }}</td>
+                <td>{{ s.last_name }}</td>
+                <td>{{ s.email }}</td>
+                <td>{{ s.phone_number }}</td>
+                <td class="text-center">
+                  <button class="btn btn-primary btn-sm">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteStudent(s.student_id)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                  <button class="btn btn-info btn-sm"
+                          (click)="studentCourseModel.student_id = s.student_id"
+                          data-bs-toggle="modal" data-bs-target="#assignCourseModal">
+                    <i class="fa fa-book"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p *ngIf="students.length === 0" class="text-center text-muted">No students available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Departments Table -->
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+          <h4 class="card-title mb-0">Departments</h4>
+          <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addDeptModal">
+            <i class="fa fa-plus"></i> Add Department
+          </button>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Department Name</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let dept of departments; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ dept.department_name }}</td>
+                <td class="text-center">
+                  <button class="btn btn-primary btn-sm">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteDepartment(dept.department_id)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p *ngIf="departments.length === 0" class="text-center text-muted">No departments available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Table -->
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+          <h4 class="card-title mb-0">Courses</h4>
+          <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+            <i class="fa fa-plus"></i> Add Course
+          </button>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Course Code</th>
+                <th scope="col">Department Name</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of courses; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ c.course_name }}</td>
+                <td>{{ c.course_code }}</td>
+                <td>{{ c.department_name }}</td>
+                <td class="text-center">
+                  <button class="btn btn-primary btn-sm">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteCourse(c.course_id)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p *ngIf="courses.length === 0" class="text-center text-muted">No courses available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals Section -->
+
+  <!-- Add New Department Modal -->
+  <div class="modal fade" id="addDeptModal" tabindex="-1" aria-labelledby="addDeptModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="addDeptModalLabel">Add New Department</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #deptForm="ngForm" (ngSubmit)="addDepartment(); deptForm.resetForm()">
+            <div class="mb-3">
+              <label for="deptName" class="form-label">Department Name:</label>
+              <input type="text" id="deptName" name="department_name" [(ngModel)]="departmentModel.department_name" required class="form-control" placeholder="Enter department name">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" [disabled]="deptForm.invalid" class="btn btn-primary">Add Department</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Course Modal -->
+  <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #courseForm="ngForm" (ngSubmit)="addCourse(); courseForm.resetForm()">
+            <div class="mb-3">
+              <label for="courseName" class="form-label">Course Name:</label>
+              <input type="text" id="courseName" name="course_name" [(ngModel)]="courseModel.course_name" required class="form-control" placeholder="Enter course name">
+            </div>
+            <div class="mb-3">
+              <label for="courseCode" class="form-label">Course Code:</label>
+              <input type="text" id="courseCode" name="course_code" [(ngModel)]="courseModel.course_code" required class="form-control" placeholder="Enter course code">
+            </div>
+            <div class="mb-3">
+              <label for="courseDept" class="form-label">Department</label>
+              <select id="courseDept" name="department_id" class="form-control" [(ngModel)]="courseModel.department_id" required>
+                <option *ngFor="let d of departments" [value]="d.department_id">
+                  {{ d.department_name }}
+                </option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" [disabled]="courseForm.invalid" class="btn btn-success">Save Course</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Student Modal -->
+  <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title" id="addStudentModalLabel">Add New Student</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #studentForm="ngForm" (ngSubmit)="addStudent(); studentForm.resetForm()">
+            <div class="mb-3">
+              <label for="studentFirstName" class="form-label">First Name:</label>
+              <input type="text" id="studentFirstName" name="first_name" [(ngModel)]="studentModel.first_name" required class="form-control" placeholder="Enter first name">
+            </div>
+            <div class="mb-3">
+              <label for="studentLastName" class="form-label">Last Name:</label>
+              <input type="text" id="studentLastName" name="last_name" [(ngModel)]="studentModel.last_name" required class="form-control" placeholder="Enter last name">
+            </div>
+            <div class="mb-3">
+              <label for="studentEmail" class="form-label">Email Address:</label>
+              <input type="email" id="studentEmail" name="email" [(ngModel)]="studentModel.email" required class="form-control" placeholder="Enter email address">
+            </div>
+            <div class="mb-3">
+              <label for="studentPhone" class="form-label">Phone Number:</label>
+              <input type="text" id="studentPhone" name="phone_number" [(ngModel)]="studentModel.phone_number" required class="form-control" placeholder="Enter phone number">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" [disabled]="studentForm.invalid" class="btn btn-warning">Save Student</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Department Modal -->
+  <div class="modal fade" id="editDepartmentModal" tabindex="-1" aria-labelledby="editDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-secondary text-white">
+          <h5 class="modal-title" id="editDepartmentModalLabel">Edit Department</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm">
+            <div class="mb-3">
+              <label for="departmentName" class="form-label">Department Name</label>
+              <input type="text" class="form-control" id="departmentName" [(ngModel)]="departmentModel.department_name" name="name" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assign Courses Modal -->
+  <div class="modal fade" id="assignCourseModal" tabindex="-1" aria-labelledby="assignCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="assignCourseModalLabel">Assign Courses to Student</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form #assignForm="ngForm" (ngSubmit)="assignCourse(); assignForm.resetForm()">
+            <div class="mb-3">
+              <label for="studentSelect" class="form-label">Select Student:</label>
+              <select id="studentSelect" name="student_id" class="form-control" [(ngModel)]="studentCourseModel.student_id" required>
+                <option *ngFor="let s of students" [value]="s.student_id">
+                  {{ s.first_name }} {{ s.last_name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="courseSelect" class="form-label">Select Courses:</label>
+              <select id="courseSelect" name="course_ids" class="form-control" multiple [(ngModel)]="studentCourseModel.course_ids" required>
+                <option *ngFor="let c of courses" [value]="c.course_id">
+                  {{ c.course_name }}
+                </option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" [disabled]="assignForm.invalid" class="btn btn-info">Assign Courses</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
